@@ -310,7 +310,69 @@ test.describe('Testing automation',()=>{
 
     });
   
+    test('testcase15:Test Case 15: Place Order: Register before Checkout',async()=>{
+      await page.getByRole('link',{name:' Signup / Login'}).click();
+      expect(page.getByText('New User Signup!')).toBeVisible();
+      await page.locator('[data-qa="signup-name"]').fill('shravya');
+      await page.locator('[data-qa="signup-email"]').fill('shravya@gmail.com');
+      await page.getByRole('button',{name :'Signup'}).click();
+      await expect(page.getByText('ENTER ACCOUNT INFORMATION')).toBeVisible();
+      await page.locator('label[for=id_gender2]').click();
+      await page.getByLabel('Password').fill('shravya@123');
+      await page.locator('select#days').selectOption('27');
+      await page.locator('select#months').selectOption('10');
+      await page.locator('select#years').selectOption('1996');
+      //await page.locator('#uniform-newsletter').click();
+      await page.getByLabel('Sign up for our newsletter!').check();
+      await page.getByLabel('Receive special offers from our partners!').check();
+      await page.getByLabel('First name').fill('shravya')
+      await page.getByLabel('Last name').fill('vattam');
+      await page.locator('input#company').fill('cloud4c');
+      await page.locator('input#address1').fill('madhapur');
+      await page.getByLabel('Address 2').fill('Near Inorbit');
+      await page.locator('select#country').selectOption('India');
+      await page.getByLabel('State').fill('Telangana');
+      await  page.getByLabel('City').fill('Hyderabad');
+      //await page.getByLabel('Zipcode').fill('500081');
+      await page.locator('#zipcode').fill('500081');
+      await page.getByLabel('Mobile Number').fill('1234567890');
+      await page.getByRole('button',{name:'Create Account'}).click();
+      await page.locator('h2[data-qa="account-created"]').isVisible();
+      //await page.getByRole('link',{name:'Continue'}).click();
+      await page.locator('[data-qa="continue-button"]').click();
+      await expect(page.getByText('Logged in as shravya')).toBeVisible();
+      await page.getByRole('link',{name:'Products'}).click();
+      await page.locator('.product-image-wrapper').nth(2).hover();
+      await page.getByText('Add to cart').nth(5).click();
+      await page.getByRole('button',{name:'Continue Shopping'}).click();
+      await page.locator('.product-image-wrapper').nth(0).hover();
+      await page.getByText('Add to cart').nth(0).click();
+      await page.getByRole('link',{name:'View Cart'}).click();
+      expect(page.url()).toBe('https://automationexercise.com/view_cart');
+      await page.locator('.btn.btn-default.check_out').click();
+      await expect(page.getByText('Address Details')).toBeVisible();
+      await expect(page.getByText('Review Your Order')).toBeVisible();
+      //await page.getByLabel('label',{name:'textarea'}).fill('please deliver between 10am-5pm');
+      await page.locator('.form-control').fill('please deliver between 10am-5pm');
+      await page.getByRole('link',{name:'Place Order'}).click();
+      //await expect(page.getByText('Payment')).toBeVisible();
+      await page.locator("[name='name_on_card']").fill('shravya vattam');
+      await page.locator("[name='card_number']").fill('12345678901234567');
+      await page.locator("[name='cvc']").fill('123');
+      await page.locator("[name='expiry_month']").fill('100');
+      await page.locator("[name='expiry_year']").fill('2029');
+      await page.getByRole('button',{name:'Pay and Confirm Order'}).click();
+      await expect(page.getByText('Your order has been placed successfully!')).toBeVisible();
+      await page.getByRole('link',{name:'Continue'}).click();
+      await page.getByRole('link',{name:' Delete Account'}).click();
+      await expect(page.getByText('Account Deleted!')).toBeVisible();
+      await page.getByRole('link',{name:'Continue'}).click();
+      await page.waitForTimeout(3000);
 
+
+
+
+    });
 
 
 
