@@ -374,6 +374,81 @@ test.describe('Testing automation',()=>{
 
     });
 
+    test('testcase16:Test Case 16: Place Order: Login before Checkout',async()=>{
+      await page.getByRole('link',{name:' Signup / Login'}).click();
+      await expect(page.getByText('Login to your account')).toBeVisible();
+      await page.locator('[data-qa="login-email"]').fill('shravya96@gmail.com');
+      await page.locator('[data-qa="login-password"]').fill('shravya@123');
+      await page.locator('[data-qa="login-button"]').click();
+      await page.getByText('Logged in as shravya').isVisible();
+      await page.getByRole('link',{name:'Products'}).click();
+      await page.locator('.product-image-wrapper').nth(2).hover();
+      await page.getByText('Add to cart').nth(5).click();
+      await page.getByRole('button',{name:'Continue Shopping'}).click();
+      await page.locator('.product-image-wrapper').nth(0).hover();
+      await page.getByText('Add to cart').nth(0).click();
+      await page.getByRole('link',{name:'View Cart'}).click();
+      expect(page.url()).toBe('https://automationexercise.com/view_cart');
+      await page.locator('.btn.btn-default.check_out').click();
+      await expect(page.getByText('Address Details')).toBeVisible();
+      await expect(page.getByText('Review Your Order')).toBeVisible();
+      //await page.getByLabel('label',{name:'textarea'}).fill('please deliver between 10am-5pm');
+      await page.locator('.form-control').fill('please deliver between 10am-5pm');
+      await page.getByRole('link',{name:'Place Order'}).click();
+      //await expect(page.getByText('Payment')).toBeVisible();
+      await page.locator("[name='name_on_card']").fill('shravya vattam');
+      await page.locator("[name='card_number']").fill('12345678901234567');
+      await page.locator("[name='cvc']").fill('123');
+      await page.locator("[name='expiry_month']").fill('100');
+      await page.locator("[name='expiry_year']").fill('2029');
+      await page.getByRole('button',{name:'Pay and Confirm Order'}).click();
+      await expect(page.getByText('Your order has been placed successfully!')).toBeVisible();
+      await page.getByRole('link',{name:'Continue'}).click();
+      await page.getByRole('link',{name:' Delete Account'}).click();
+      await expect(page.getByText('Account Deleted!')).toBeVisible();
+      await page.getByRole('link',{name:'Continue'}).click();
+      await page.waitForTimeout(3000);
+
+    });
 
 
+    test('testcase17:Remove Products From Cart',async()=>{
+      await page.getByRole('link',{name:'Products'}).click();
+      await page.locator('.product-image-wrapper').nth(2).hover();
+      await page.getByText('Add to cart').nth(5).click();
+      await page.getByRole('button',{name:'Continue Shopping'}).click();
+      await page.locator('.product-image-wrapper').nth(0).hover();
+      await page.getByText('Add to cart').nth(0).click();
+      await page.getByRole('link',{name:'View Cart'}).click();
+      expect(page.url()).toBe('https://automationexercise.com/view_cart');
+      await page.locator('[data-product-id="1"]').click();
+      await page.locator('[data-product-id="3"]').click();
+      await expect(page.locator('#empty_cart')).toBeVisible();
+      await page.waitForTimeout(3000);
+
+    });
+
+
+
+      test('testcase18:View Category Products',async()=>{
+        
+        await expect(page.locator('.panel-group.category-products')).toBeVisible();
+        //page.on('dialog', dialog => dialog.dismiss());
+        await page.locator('[data-parent="#accordian"]').nth(0).click();
+        await page.getByRole('link',{name:'Dress'}).click();  
+        //page.on('dialog', dialog => dialog.dismiss());
+        //await page.waitForTimeout(2000);
+        expect(page.url()).toBe('https://automationexercise.com/category_products/1');
+        await expect(page.getByText('Women - Dress Products')).toBeVisible();
+        await page.waitForTimeout(3000);
+        await page.locator('[data-parent="#accordian"]').nth(1).click();
+        await page.getByRole('link',{name:'Tshirts'}).click();
+        expect(page.url()).toBe('https://automationexercise.com/category_products/3');
+        await expect(page.getByText('Men - Tshirts Products')).toBeVisible();
+        await page.waitForTimeout(3000);
+
+
+
+
+      });
 });
